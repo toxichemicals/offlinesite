@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>t0x1ch3m1cals - Offline</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Base styles for the body and overall layout */
+        body {
+            font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+        }
+
+        .text-lime {
+            color: #00FF41;
+        }
+
+        /* Matrix Canvas styles */
+        #matrixCanvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 10;
+            background-color: #000000;
+        }
+
+        .hacker-text-box {
+            background-color: #000000;
+            color: #00FF41;
+            border: 2px solid #00FF41;
+            box-shadow: 0 0 10px rgba(0,255,65,0.5);
+        }
+    </style>
+</head>
+<body class="bg-black text-slate-200 min-h-screen flex flex-col justify-center items-center p-8 box-border relative">
+    <canvas id="matrixCanvas"></canvas>
+
+    <div class="content-container max-w-4xl w-full bg-black p-8 md:p-12 lg:p-16 border border-[#00FF41] relative z-20 hacker-text-box text-center">
+        <h1 class="text-4xl md:text-5xl lg:text-6xl font-bold text-lime mb-8 leading-tight">
+            Uh oh!
+        </h1>
+        <p class="text-lime text-lg md:text-xl leading-relaxed mb-6">
+            My servers are offline. If these are down for a long time, join
+            <a href="https://discord.gg/YAsyGUSC" class="text-lime underline hover:no-underline transition-colors duration-200" target="_blank">https://discord.gg/YAsyGUSC</a> 
+            and contact me, or email me at 
+            <a href="mailto:toxichemicals@proton.me" class="text-lime underline hover:no-underline transition-colors duration-200">toxichemicals@proton.me</a>!
+        </p>
+    </div>
+
+    <script>
+        // --- Matrix Waterfall Effect ---
+        const canvas = document.getElementById('matrixCanvas');
+        const ctx = canvas.getContext('2d');
+
+        let width, height, characters, fontSize, columns, drops;
+        let animationFrameId;
+
+        function initializeMatrix() {
+            width = canvas.width = window.innerWidth;
+            height = canvas.height = window.innerHeight;
+            characters = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890!@#$%^&*()_+-=[]{}|;:,.<>?';
+            fontSize = 16;
+            columns = width / fontSize;
+            drops = [];
+            for (let i = 0; i < columns; i++) {
+                drops[i] = 1;
+            }
+        }
+
+        function drawMatrix() {
+            ctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
+            ctx.fillRect(0, 0, width, height);
+
+            ctx.fillStyle = '#00ff41';
+            ctx.font = `${fontSize}px monospace`;
+
+            for (let i = 0; i < drops.length; i++) {
+                const text = characters.charAt(Math.floor(Math.random() * characters.length));
+                ctx.fillText(text, i * fontSize, drops[i] * fontSize);
+
+                if (drops[i] * fontSize > height && Math.random() > 0.975) {
+                    drops[i] = 0;
+                }
+                drops[i]++;
+            }
+        }
+
+        function startMatrixAnimation() {
+            animationFrameId = requestAnimationFrame(startMatrixAnimation);
+            drawMatrix();
+        }
+
+        window.onload = function() {
+            initializeMatrix();
+            startMatrixAnimation();
+        };
+
+        window.addEventListener('resize', () => {
+            initializeMatrix();
+        });
+    </script>
+</body>
+</html>
